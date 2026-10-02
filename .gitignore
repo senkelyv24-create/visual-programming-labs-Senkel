@@ -1,0 +1,16 @@
+﻿# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Local helpers (not part of lab submission)
+tools/
+lab01.pdf
+lab01_text.txt
+build_lab1.py
+__pycache__/
+*.pyc
+*.pdf
