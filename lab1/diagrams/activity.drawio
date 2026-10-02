@@ -19,7 +19,7 @@
         <mxCell id="a3" value="Зафиксировать платёж" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
           <mxGeometry x="140" y="380" width="140" height="50" as="geometry"/>
         </mxCell>
-        <mxCell id="a4" value="Вернуть ошибку гостю" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+        <mxCell id="a4" value="Предложить повтор оплаты" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="340" y="275" width="140" height="50" as="geometry"/>
         </mxCell>
         <mxCell id="end_ok" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
