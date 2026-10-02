@@ -58,8 +58,12 @@
       <bpmn:incoming>Flow_14</bpmn:incoming>
       <bpmn:outgoing>Flow_15</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:endEvent id="EndEvent_Ok" name="Бронь подтверждена">
+    <bpmn:task id="Task_SMS" name="Отправить SMS-напоминание">
       <bpmn:incoming>Flow_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_16</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="EndEvent_Ok" name="Бронь подтверждена">
+      <bpmn:incoming>Flow_16</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_NoRoom" name="Нет свободных номеров">
       <bpmn:incoming>Flow_5</bpmn:incoming>
@@ -81,7 +85,8 @@
     <bpmn:sequenceFlow id="Flow_12" sourceRef="Gateway_AndSplit" targetRef="Task_Desk" />
     <bpmn:sequenceFlow id="Flow_13" sourceRef="Task_Confirm" targetRef="Gateway_AndJoin" />
     <bpmn:sequenceFlow id="Flow_14" sourceRef="Task_Desk" targetRef="Gateway_AndJoin" />
-    <bpmn:sequenceFlow id="Flow_15" sourceRef="Gateway_AndJoin" targetRef="EndEvent_Ok" />
+    <bpmn:sequenceFlow id="Flow_15" sourceRef="Gateway_AndJoin" targetRef="Task_SMS" />
+    <bpmn:sequenceFlow id="Flow_16" sourceRef="Task_SMS" targetRef="EndEvent_Ok" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_HotelBooking">
@@ -121,8 +126,11 @@
       <bpmndi:BPMNShape id="Gateway_AndJoin_di" bpmnElement="Gateway_AndJoin">
         <dc:Bounds x="1615" y="225" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SMS_di" bpmnElement="Task_SMS">
+        <dc:Bounds x="1700" y="210" width="120" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_Ok_di" bpmnElement="EndEvent_Ok">
-        <dc:Bounds x="1722" y="232" width="36" height="36" />
+        <dc:Bounds x="1882" y="232" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_NoRoom_di" bpmnElement="EndEvent_NoRoom">
         <dc:Bounds x="592" y="352" width="36" height="36" />
@@ -173,7 +181,10 @@
         <di:waypoint x="1550" y="340" /><di:waypoint x="1640" y="340" /><di:waypoint x="1640" y="275" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15_di" bpmnElement="Flow_15">
-        <di:waypoint x="1665" y="250" /><di:waypoint x="1722" y="250" />
+        <di:waypoint x="1665" y="250" /><di:waypoint x="1700" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16_di" bpmnElement="Flow_16">
+        <di:waypoint x="1820" y="250" /><di:waypoint x="1882" y="250" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
