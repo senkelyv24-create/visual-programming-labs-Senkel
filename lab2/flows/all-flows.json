@@ -1,0 +1,1812 @@
+[
+  {
+    "id": "b201000000000001",
+    "type": "tab",
+    "label": "01 inject-debug",
+    "disabled": false,
+    "info": "Сенкель. Inject каждые 5 секунд: payload — фамилия, topic — lab2/senkel/basic. Debug показывает всё сообщение.",
+    "env": []
+  },
+  {
+    "id": "b201000000000002",
+    "type": "inject",
+    "z": "b201000000000001",
+    "name": "Сенкель / 5 секунд",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "0.5",
+    "topic": "lab2/senkel/basic",
+    "payload": "Сенкель",
+    "payloadType": "str",
+    "x": 200,
+    "y": 140,
+    "wires": [
+      [
+        "b201000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b201000000000003",
+    "type": "debug",
+    "z": "b201000000000001",
+    "name": "полное сообщение",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 480,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b202000000000001",
+    "type": "tab",
+    "label": "02 function",
+    "disabled": false,
+    "info": "Сенкель. Function считает среднее оценок: let/const, if/else, цикл for, массив и объект.",
+    "env": []
+  },
+  {
+    "id": "b202000000000002",
+    "type": "inject",
+    "z": "b202000000000001",
+    "name": "оценки",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/function",
+    "payload": "[7,9,6,8,10]",
+    "payloadType": "json",
+    "x": 170,
+    "y": 140,
+    "wires": [
+      [
+        "b202000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b202000000000003",
+    "type": "function",
+    "z": "b202000000000001",
+    "name": "среднее Сенкель",
+    "func": "const surname = 'Сенкель';\nlet scores = [7, 9, 6, 8, 10];\nif (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    scores = msg.payload;\n}\nlet sum = 0;\nfor (let i = 0; i < scores.length; i++) {\n    sum += Number(scores[i]);\n}\nconst average = sum / scores.length;\nlet status;\nif (average >= 8) {\n    status = 'отлично';\n} else {\n    status = 'нужно подтянуть';\n}\nmsg.topic = 'lab2/senkel/function';\nmsg.payload = {\n    student: surname,\n    scores: scores,\n    average: Math.round(average * 10) / 10,\n    status: status\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 140,
+    "wires": [
+      [
+        "b202000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b202000000000004",
+    "type": "debug",
+    "z": "b202000000000001",
+    "name": "результат",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 620,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b203000000000001",
+    "type": "tab",
+    "label": "03 switch",
+    "disabled": false,
+    "info": "Сенкель. Switch ветвит msg.payload: «отлично» идёт на первый debug, всё остальное — на второй.",
+    "env": []
+  },
+  {
+    "id": "b203000000000002",
+    "type": "inject",
+    "z": "b203000000000001",
+    "name": "высокие оценки",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/switch",
+    "payload": "[9,10,8,9]",
+    "payloadType": "json",
+    "x": 180,
+    "y": 100,
+    "wires": [
+      [
+        "b203000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b203000000000003",
+    "type": "inject",
+    "z": "b203000000000001",
+    "name": "низкие оценки",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/switch",
+    "payload": "[4,5,6]",
+    "payloadType": "json",
+    "x": 180,
+    "y": 200,
+    "wires": [
+      [
+        "b203000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b203000000000004",
+    "type": "function",
+    "z": "b203000000000001",
+    "name": "оценка словами",
+    "func": "const surname = 'Сенкель';\nlet scores = [9, 10, 8];\nif (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    scores = msg.payload;\n}\nlet sum = 0;\nfor (let i = 0; i < scores.length; i++) {\n    sum += Number(scores[i]);\n}\nconst average = sum / scores.length;\nlet mark;\nif (average >= 8) {\n    mark = 'отлично';\n} else {\n    mark = 'нужно подтянуть';\n}\nmsg.topic = 'lab2/senkel/switch';\nmsg.student = surname;\nmsg.average = Math.round(average * 10) / 10;\nmsg.payload = mark;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 150,
+    "wires": [
+      [
+        "b203000000000005"
+      ]
+    ]
+  },
+  {
+    "id": "b203000000000005",
+    "type": "switch",
+    "z": "b203000000000001",
+    "name": "по payload",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "отлично",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 640,
+    "y": 150,
+    "wires": [
+      [
+        "b203000000000006"
+      ],
+      [
+        "b203000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b203000000000006",
+    "type": "debug",
+    "z": "b203000000000001",
+    "name": "ветка: отлично",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 860,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "b203000000000007",
+    "type": "debug",
+    "z": "b203000000000001",
+    "name": "ветка: нужно подтянуть",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 890,
+    "y": 210,
+    "wires": []
+  },
+  {
+    "id": "b204000000000001",
+    "type": "tab",
+    "label": "04 change",
+    "disabled": false,
+    "info": "Сенкель. Change задаёт topic, текущее время в msg.timestamp и новый payload.",
+    "env": []
+  },
+  {
+    "id": "b204000000000002",
+    "type": "inject",
+    "z": "b204000000000001",
+    "name": "запуск",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "до-change",
+    "payload": "исходное значение",
+    "payloadType": "str",
+    "x": 170,
+    "y": 140,
+    "wires": [
+      [
+        "b204000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b204000000000003",
+    "type": "change",
+    "z": "b204000000000001",
+    "name": "topic, время, payload",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "lab2/senkel/change",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "timestamp",
+        "pt": "msg",
+        "to": "",
+        "tot": "date"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "Сенкель — лабораторная Node-RED",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 430,
+    "y": 140,
+    "wires": [
+      [
+        "b204000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b204000000000004",
+    "type": "debug",
+    "z": "b204000000000001",
+    "name": "полное сообщение",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b205000000000001",
+    "type": "tab",
+    "label": "05 template",
+    "disabled": false,
+    "info": "Сенкель. Inject передаёт объект, Mustache-шаблон собирает из него JSON.",
+    "env": []
+  },
+  {
+    "id": "b205000000000002",
+    "type": "inject",
+    "z": "b205000000000001",
+    "name": "объект студента",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/template",
+    "payload": "{\"student\":\"Сенкель\",\"lab\":2,\"topic\":\"Node-RED\"}",
+    "payloadType": "json",
+    "x": 190,
+    "y": 140,
+    "wires": [
+      [
+        "b205000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b205000000000003",
+    "type": "template",
+    "z": "b205000000000001",
+    "name": "карточка JSON",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "{\n  \"student\": \"{{payload.student}}\",\n  \"lab\": {{payload.lab}},\n  \"topic\": \"{{payload.topic}}\",\n  \"text\": \"Студент {{payload.student}} сдаёт лабораторную {{payload.lab}}\"\n}\n",
+    "output": "json",
+    "x": 430,
+    "y": 140,
+    "wires": [
+      [
+        "b205000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b205000000000004",
+    "type": "debug",
+    "z": "b205000000000001",
+    "name": "шаблон",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 640,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b206000000000001",
+    "type": "tab",
+    "label": "06 http request",
+    "disabled": false,
+    "info": "Сенкель. GET https://catfact.ninja/fact без токена, ответ — разобранный JSON.",
+    "env": []
+  },
+  {
+    "id": "b206000000000010",
+    "type": "tls-config",
+    "name": "без проверки сертификата",
+    "cert": "",
+    "key": "",
+    "ca": "",
+    "certname": "",
+    "keyname": "",
+    "caname": "",
+    "servername": "",
+    "verifyservercert": false,
+    "alpnprotocol": ""
+  },
+  {
+    "id": "b206000000000002",
+    "type": "inject",
+    "z": "b206000000000001",
+    "name": "запросить факт",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/http",
+    "payload": "",
+    "payloadType": "date",
+    "x": 190,
+    "y": 140,
+    "wires": [
+      [
+        "b206000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b206000000000003",
+    "type": "http request",
+    "z": "b206000000000001",
+    "name": "GET catfact.ninja",
+    "method": "GET",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "https://catfact.ninja/fact",
+    "tls": "b206000000000010",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 440,
+    "y": 140,
+    "wires": [
+      [
+        "b206000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b206000000000004",
+    "type": "debug",
+    "z": "b206000000000001",
+    "name": "ответ API",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 670,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b207000000000001",
+    "type": "tab",
+    "label": "07 mqtt",
+    "disabled": false,
+    "info": "Сенкель. Публикация случайной температуры в student/senkel/lab2/temperature на broker.hivemq.com и приём того же топика.",
+    "env": []
+  },
+  {
+    "id": "b207000000000010",
+    "type": "mqtt-broker",
+    "name": "HiveMQ public",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "senkel-lab2",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "b207000000000002",
+    "type": "inject",
+    "z": "b207000000000001",
+    "name": "датчик / 5 секунд",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "topic": "student/senkel/lab2/temperature",
+    "payload": "",
+    "payloadType": "date",
+    "x": 190,
+    "y": 100,
+    "wires": [
+      [
+        "b207000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b207000000000003",
+    "type": "function",
+    "z": "b207000000000001",
+    "name": "случайная температура",
+    "func": "const value = Math.round((18 + Math.random() * 10) * 10) / 10;\nmsg.payload = {\n    student: 'Сенкель',\n    sensor: 'temperature',\n    value: value\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 430,
+    "y": 100,
+    "wires": [
+      [
+        "b207000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b207000000000004",
+    "type": "mqtt out",
+    "z": "b207000000000001",
+    "name": "публикация",
+    "topic": "student/senkel/lab2/temperature",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "b207000000000010",
+    "x": 680,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "b207000000000005",
+    "type": "mqtt in",
+    "z": "b207000000000001",
+    "name": "подписка",
+    "topic": "student/senkel/lab2/temperature",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "b207000000000010",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 180,
+    "y": 240,
+    "wires": [
+      [
+        "b207000000000006"
+      ]
+    ]
+  },
+  {
+    "id": "b207000000000006",
+    "type": "debug",
+    "z": "b207000000000001",
+    "name": "принято из MQTT",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 430,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "b208000000000001",
+    "type": "tab",
+    "label": "08 endpoints",
+    "disabled": false,
+    "info": "Сенкель. GET /api/text, /api/info и /api/items/:id. У третьего есть 400 и 404.",
+    "env": []
+  },
+  {
+    "id": "b208000000000002",
+    "type": "http in",
+    "z": "b208000000000001",
+    "name": "GET /api/text",
+    "url": "/api/text",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 80,
+    "wires": [
+      [
+        "b208000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b208000000000003",
+    "type": "function",
+    "z": "b208000000000001",
+    "name": "текст",
+    "func": "msg.headers = { 'Content-Type': 'text/plain; charset=utf-8' };\nmsg.payload = 'Сенкель: лабораторная работа 2, Node-RED';\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 80,
+    "wires": [
+      [
+        "b208000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b208000000000004",
+    "type": "http response",
+    "z": "b208000000000001",
+    "name": "ответ text",
+    "statusCode": "",
+    "headers": {},
+    "x": 620,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "b208000000000005",
+    "type": "http in",
+    "z": "b208000000000001",
+    "name": "GET /api/info",
+    "url": "/api/info",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 180,
+    "wires": [
+      [
+        "b208000000000006"
+      ]
+    ]
+  },
+  {
+    "id": "b208000000000006",
+    "type": "function",
+    "z": "b208000000000001",
+    "name": "json info",
+    "func": "msg.payload = {\n    student: 'Сенкель',\n    tool: 'Node-RED'\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 180,
+    "wires": [
+      [
+        "b208000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b208000000000007",
+    "type": "http response",
+    "z": "b208000000000001",
+    "name": "ответ info",
+    "statusCode": "",
+    "headers": {},
+    "x": 620,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "b208000000000008",
+    "type": "http in",
+    "z": "b208000000000001",
+    "name": "GET /api/items/:id",
+    "url": "/api/items/:id",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 180,
+    "y": 320,
+    "wires": [
+      [
+        "b208000000000009"
+      ]
+    ]
+  },
+  {
+    "id": "b208000000000009",
+    "type": "function",
+    "z": "b208000000000001",
+    "name": "элемент по id",
+    "func": "const idRaw = msg.req.params.id;\nconst status = msg.req.query.status;\nconst id = Number(idRaw);\nconst allowed = ['active', 'draft'];\nconst items = [\n    { id: 1, name: 'inject-debug', owner: 'Сенкель', status: 'active' },\n    { id: 2, name: 'mqtt', owner: 'Сенкель', status: 'active' },\n    { id: 3, name: 'dashboard', owner: 'Сенкель', status: 'draft' }\n];\nif (!idRaw || !Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Некорректный id', student: 'Сенкель' };\n    return msg;\n}\nif (status && allowed.indexOf(status) === -1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Недопустимый status', allowed: allowed };\n    return msg;\n}\nlet found = null;\nfor (let i = 0; i < items.length; i++) {\n    if (items[i].id === id) {\n        if (!status || items[i].status === status) {\n            found = items[i];\n        }\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Элемент не найден', id: id };\n    return msg;\n}\nmsg.statusCode = 200;\nmsg.payload = found;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 430,
+    "y": 320,
+    "wires": [
+      [
+        "b20800000000000a"
+      ]
+    ]
+  },
+  {
+    "id": "b20800000000000a",
+    "type": "http response",
+    "z": "b208000000000001",
+    "name": "ответ items",
+    "statusCode": "",
+    "headers": {},
+    "x": 660,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "b209000000000001",
+    "type": "tab",
+    "label": "09 dashboard",
+    "disabled": false,
+    "info": "Сенкель. Датчик температуры: gauge и график истории на вкладке dashboard.",
+    "env": []
+  },
+  {
+    "id": "b2090000000000b1",
+    "type": "ui_base",
+    "theme": {
+      "name": "theme-light",
+      "lightTheme": {
+        "default": "#0094CE",
+        "baseColor": "#0094CE",
+        "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+        "edited": true,
+        "reset": false
+      },
+      "darkTheme": {
+        "default": "#097479",
+        "baseColor": "#097479",
+        "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+        "edited": true,
+        "reset": false
+      },
+      "customTheme": {
+        "name": "Untitled Theme 1",
+        "default": "#4B7930",
+        "baseColor": "#4B7930",
+        "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+        "reset": false
+      },
+      "themeState": {
+        "base-color": {
+          "default": "#0094CE",
+          "value": "#0094CE",
+          "edited": false
+        },
+        "page-titlebar-backgroundColor": {
+          "value": "#0094CE",
+          "edited": false
+        },
+        "page-backgroundColor": {
+          "value": "#fafafa",
+          "edited": false
+        },
+        "page-sidebar-backgroundColor": {
+          "value": "#ffffff",
+          "edited": false
+        },
+        "group-textColor": {
+          "value": "#1a1a1a",
+          "edited": false
+        },
+        "group-borderColor": {
+          "value": "#ffffff",
+          "edited": false
+        },
+        "group-backgroundColor": {
+          "value": "#ffffff",
+          "edited": false
+        },
+        "widget-textColor": {
+          "value": "#111111",
+          "edited": false
+        },
+        "widget-backgroundColor": {
+          "value": "#0094CE",
+          "edited": false
+        },
+        "widget-borderColor": {
+          "value": "#ffffff",
+          "edited": false
+        },
+        "base-font": {
+          "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+        }
+      },
+      "angularTheme": {
+        "primary": "indigo",
+        "accents": "blue",
+        "warn": "red",
+        "background": "grey",
+        "palette": "light"
+      }
+    },
+    "site": {
+      "name": "Сенкель Lab2",
+      "hideToolbar": "false",
+      "allowSwipe": "false",
+      "lockMenu": "false",
+      "allowTempTheme": "true",
+      "dateFormat": "DD.MM.YYYY",
+      "sizes": {
+        "sx": 48,
+        "sy": 48,
+        "gx": 6,
+        "gy": 6,
+        "cx": 6,
+        "cy": 6,
+        "px": 0,
+        "py": 0
+      }
+    }
+  },
+  {
+    "id": "b2090000000000t1",
+    "type": "ui_tab",
+    "name": "Датчик Сенкель",
+    "icon": "dashboard",
+    "order": 1,
+    "disabled": false,
+    "hidden": false
+  },
+  {
+    "id": "b2090000000000g1",
+    "type": "ui_group",
+    "name": "Температура",
+    "tab": "b2090000000000t1",
+    "order": 1,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "b209000000000002",
+    "type": "inject",
+    "z": "b209000000000001",
+    "name": "датчик температуры",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "2",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "0.5",
+    "topic": "Сенкель / температура",
+    "payload": "",
+    "payloadType": "date",
+    "x": 200,
+    "y": 160,
+    "wires": [
+      [
+        "b209000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b209000000000003",
+    "type": "function",
+    "z": "b209000000000001",
+    "name": "случайные °C",
+    "func": "const temp = Math.round((18 + Math.random() * 12) * 10) / 10;\nmsg.payload = temp;\nmsg.topic = 'Сенкель / температура';\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 450,
+    "y": 160,
+    "wires": [
+      [
+        "b209000000000004",
+        "b209000000000005"
+      ]
+    ]
+  },
+  {
+    "id": "b209000000000004",
+    "type": "ui_gauge",
+    "z": "b209000000000001",
+    "name": "",
+    "group": "b2090000000000g1",
+    "order": 1,
+    "width": 6,
+    "height": 4,
+    "gtype": "gage",
+    "title": "Температура",
+    "label": "°C",
+    "format": "{{value}}",
+    "min": 0,
+    "max": "40",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "",
+    "seg2": "",
+    "diff": false,
+    "className": "",
+    "x": 700,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "b209000000000005",
+    "type": "ui_chart",
+    "z": "b209000000000001",
+    "name": "",
+    "group": "b2090000000000g1",
+    "order": 2,
+    "width": 12,
+    "height": 6,
+    "label": "История температуры",
+    "chartType": "line",
+    "legend": "false",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "Нет данных",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": "1",
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "useDifferentColor": false,
+    "colors": [
+      "#1f77b4",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "className": "",
+    "x": 700,
+    "y": 220,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "b210000000000001",
+    "type": "tab",
+    "label": "10 telegram",
+    "disabled": false,
+    "info": "Сенкель. Бот tvl_lab2_senkel_bot: /start, /status и эхо на обычный текст. Токен BotFather вводится в конфиг ноды и в репозиторий не кладётся.",
+    "env": []
+  },
+  {
+    "id": "b210000000000010",
+    "type": "telegram bot",
+    "botname": "tvl_lab2_senkel_bot",
+    "usernames": "",
+    "chatids": "",
+    "baseapiurl": "",
+    "testenvironment": false,
+    "updatemode": "polling",
+    "addressfamily": "",
+    "pollinterval": 300,
+    "usesocks": false,
+    "sockshost": "",
+    "socksprotocol": "socks5",
+    "socksport": 6667,
+    "socksusername": "anonymous",
+    "sockspassword": "",
+    "bothost": "",
+    "botpath": "",
+    "localbothost": "0.0.0.0",
+    "localbotport": 8443,
+    "publicbotport": 8443,
+    "privatekey": "",
+    "certificate": "",
+    "useselfsignedcertificate": false,
+    "sslterminated": false,
+    "verboselogging": false
+  },
+  {
+    "id": "b210000000000002",
+    "type": "telegram command",
+    "z": "b210000000000001",
+    "name": "/start",
+    "command": "/start",
+    "description": "Запуск бота",
+    "registercommand": true,
+    "language": "ru",
+    "scope": "default",
+    "bot": "b210000000000010",
+    "strict": false,
+    "hasresponse": false,
+    "useregex": false,
+    "removeregexcommand": false,
+    "outputs": 1,
+    "x": 180,
+    "y": 80,
+    "wires": [
+      [
+        "b210000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b210000000000003",
+    "type": "function",
+    "z": "b210000000000001",
+    "name": "ответ /start",
+    "func": "msg.payload = {\n    chatId: msg.payload.chatId,\n    type: 'message',\n    content: 'Привет. Это tvl_lab2_senkel_bot. Студент Сенкель, лабораторная Node-RED. Напиши сообщение — я повторю его. Команда /status показывает, что бот на связи.'\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 80,
+    "wires": [
+      [
+        "b210000000000008"
+      ]
+    ]
+  },
+  {
+    "id": "b210000000000004",
+    "type": "telegram command",
+    "z": "b210000000000001",
+    "name": "/status",
+    "command": "/status",
+    "description": "Проверка бота",
+    "registercommand": true,
+    "language": "ru",
+    "scope": "default",
+    "bot": "b210000000000010",
+    "strict": false,
+    "hasresponse": false,
+    "useregex": false,
+    "removeregexcommand": false,
+    "outputs": 1,
+    "x": 180,
+    "y": 180,
+    "wires": [
+      [
+        "b210000000000005"
+      ]
+    ]
+  },
+  {
+    "id": "b210000000000005",
+    "type": "function",
+    "z": "b210000000000001",
+    "name": "ответ /status",
+    "func": "msg.payload = {\n    chatId: msg.payload.chatId,\n    type: 'message',\n    content: 'Бот tvl_lab2_senkel_bot на связи. Поток lab2/senkel/telegram.'\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 180,
+    "wires": [
+      [
+        "b210000000000008"
+      ]
+    ]
+  },
+  {
+    "id": "b210000000000006",
+    "type": "telegram receiver",
+    "z": "b210000000000001",
+    "name": "входящие",
+    "bot": "b210000000000010",
+    "saveDataDir": "",
+    "filterCommands": true,
+    "x": 170,
+    "y": 300,
+    "wires": [
+      [
+        "b210000000000007"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "b210000000000007",
+    "type": "function",
+    "z": "b210000000000001",
+    "name": "эхо",
+    "func": "const incoming = msg.payload || {};\nconst text = incoming.content || '';\nif (!text || incoming.type !== 'message') {\n    return null;\n}\nmsg.payload = {\n    chatId: incoming.chatId,\n    type: 'message',\n    content: 'Сенкель: ' + text\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 300,
+    "wires": [
+      [
+        "b210000000000008"
+      ]
+    ]
+  },
+  {
+    "id": "b210000000000008",
+    "type": "telegram sender",
+    "z": "b210000000000001",
+    "name": "отправить",
+    "bot": "b210000000000010",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 660,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "b211000000000001",
+    "type": "tab",
+    "label": "11 files",
+    "disabled": false,
+    "info": "Сенкель. Запись строки в lab2/files/senkel-lab2.txt и чтение файла обратно. Файл лежит на диске и переживает перезапуск Node-RED.",
+    "env": []
+  },
+  {
+    "id": "b211000000000002",
+    "type": "inject",
+    "z": "b211000000000001",
+    "name": "записать строку",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/file",
+    "payload": "",
+    "payloadType": "date",
+    "x": 180,
+    "y": 100,
+    "wires": [
+      [
+        "b211000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b211000000000003",
+    "type": "function",
+    "z": "b211000000000001",
+    "name": "строка журнала",
+    "func": "const stamp = new Date().toISOString();\nmsg.payload = 'Сенкель;lab2;file;' + stamp;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 100,
+    "wires": [
+      [
+        "b211000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b211000000000004",
+    "type": "file",
+    "z": "b211000000000001",
+    "name": "дописать файл",
+    "filename": "files/senkel-lab2.txt",
+    "filenameType": "str",
+    "appendNewline": true,
+    "createDir": true,
+    "overwriteFile": "false",
+    "encoding": "utf8",
+    "x": 660,
+    "y": 100,
+    "wires": [
+      [
+        "b211000000000005"
+      ]
+    ]
+  },
+  {
+    "id": "b211000000000005",
+    "type": "debug",
+    "z": "b211000000000001",
+    "name": "записано",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 860,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "b211000000000006",
+    "type": "inject",
+    "z": "b211000000000001",
+    "name": "прочитать файл",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/file-read",
+    "payload": "",
+    "payloadType": "date",
+    "x": 190,
+    "y": 240,
+    "wires": [
+      [
+        "b211000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b211000000000007",
+    "type": "file in",
+    "z": "b211000000000001",
+    "name": "чтение файла",
+    "filename": "files/senkel-lab2.txt",
+    "filenameType": "str",
+    "format": "utf8",
+    "chunk": false,
+    "sendError": false,
+    "encoding": "none",
+    "allProps": false,
+    "x": 430,
+    "y": 240,
+    "wires": [
+      [
+        "b211000000000008"
+      ]
+    ]
+  },
+  {
+    "id": "b211000000000008",
+    "type": "debug",
+    "z": "b211000000000001",
+    "name": "содержимое",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 660,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "b212000000000001",
+    "type": "tab",
+    "label": "12 context",
+    "disabled": false,
+    "info": "Сенкель. Счётчик в flow context: значение живёт между сообщениями. Контекст сохранён на диск (localfilesystem), поэтому переживает перезапуск Node-RED.",
+    "env": []
+  },
+  {
+    "id": "b212000000000002",
+    "type": "inject",
+    "z": "b212000000000001",
+    "name": "увеличить счётчик",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/context",
+    "payload": "",
+    "payloadType": "date",
+    "x": 200,
+    "y": 100,
+    "wires": [
+      [
+        "b212000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b212000000000003",
+    "type": "function",
+    "z": "b212000000000001",
+    "name": "flow context +1",
+    "func": "let count = flow.get('senkelCounter');\nif (typeof count !== 'number') {\n    count = 0;\n}\ncount = count + 1;\nflow.set('senkelCounter', count);\nmsg.payload = {\n    student: 'Сенкель',\n    counter: count,\n    source: 'flow context'\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 450,
+    "y": 100,
+    "wires": [
+      [
+        "b212000000000004"
+      ]
+    ]
+  },
+  {
+    "id": "b212000000000004",
+    "type": "debug",
+    "z": "b212000000000001",
+    "name": "после увеличения",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "b212000000000005",
+    "type": "inject",
+    "z": "b212000000000001",
+    "name": "прочитать счётчик",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "lab2/senkel/context-read",
+    "payload": "",
+    "payloadType": "date",
+    "x": 200,
+    "y": 240,
+    "wires": [
+      [
+        "b212000000000006"
+      ]
+    ]
+  },
+  {
+    "id": "b212000000000006",
+    "type": "function",
+    "z": "b212000000000001",
+    "name": "прочитать flow context",
+    "func": "const count = flow.get('senkelCounter');\nmsg.payload = {\n    student: 'Сенкель',\n    counter: count,\n    note: 'значение сохранилось между сообщениями'\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 470,
+    "y": 240,
+    "wires": [
+      [
+        "b212000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b212000000000007",
+    "type": "debug",
+    "z": "b212000000000001",
+    "name": "прочитано",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 720,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "b213000000000001",
+    "type": "tab",
+    "label": "13 crud notes",
+    "disabled": false,
+    "info": "Дополнительный CRUD заметок Сенкель (не вместо ачивки). Хранение во flow context: данные живут между запросами. Два поля: title и author.",
+    "env": []
+  },
+  {
+    "id": "b213000000000011",
+    "type": "http in",
+    "z": "b213000000000001",
+    "name": "GET /api/notes",
+    "url": "/api/notes",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 170,
+    "y": 60,
+    "wires": [
+      [
+        "b213000000000012"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000012",
+    "type": "function",
+    "z": "b213000000000001",
+    "name": "список",
+    "func": "let notes = flow.get('senkelNotes');\nif (!Array.isArray(notes)) {\n    notes = [{ id: 1, title: 'Стартовая заметка', author: 'Сенкель' }];\n    flow.set('senkelNotes', notes);\n    flow.set('senkelNotesSeq', 1);\n}\nmsg.statusCode = 200;\nmsg.payload = notes;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 60,
+    "wires": [
+      [
+        "b213000000000013"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000013",
+    "type": "http response",
+    "z": "b213000000000001",
+    "name": "ответ списка",
+    "statusCode": "",
+    "headers": {},
+    "x": 620,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "b213000000000021",
+    "type": "http in",
+    "z": "b213000000000001",
+    "name": "GET /api/notes/:id",
+    "url": "/api/notes/:id",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 180,
+    "y": 140,
+    "wires": [
+      [
+        "b213000000000022"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000022",
+    "type": "function",
+    "z": "b213000000000001",
+    "name": "одна заметка",
+    "func": "const id = Number(msg.req.params.id);\nlet notes = flow.get('senkelNotes') || [];\nif (!Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'id должен быть положительным целым' };\n    return msg;\n}\nlet found = null;\nfor (let i = 0; i < notes.length; i++) {\n    if (notes[i].id === id) {\n        found = notes[i];\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Заметка не найдена', id: id };\n    return msg;\n}\nmsg.statusCode = 200;\nmsg.payload = found;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 140,
+    "wires": [
+      [
+        "b213000000000023"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000023",
+    "type": "http response",
+    "z": "b213000000000001",
+    "name": "ответ заметки",
+    "statusCode": "",
+    "headers": {},
+    "x": 650,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b213000000000031",
+    "type": "http in",
+    "z": "b213000000000001",
+    "name": "POST /api/notes",
+    "url": "/api/notes",
+    "method": "post",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 170,
+    "y": 230,
+    "wires": [
+      [
+        "b213000000000032"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000032",
+    "type": "function",
+    "z": "b213000000000001",
+    "name": "создать",
+    "func": "const body = msg.payload || {};\nconst title = typeof body.title === 'string' ? body.title.trim() : '';\nconst author = typeof body.author === 'string' ? body.author.trim() : '';\nif (!title || !author) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Нужны непустые поля title и author' };\n    return msg;\n}\nlet notes = flow.get('senkelNotes');\nif (!Array.isArray(notes)) {\n    notes = [];\n}\nlet seq = flow.get('senkelNotesSeq');\nif (typeof seq !== 'number') {\n    seq = 0;\n}\nseq = seq + 1;\nconst note = { id: seq, title: title, author: author };\nnotes.push(note);\nflow.set('senkelNotes', notes);\nflow.set('senkelNotesSeq', seq);\nmsg.statusCode = 201;\nmsg.payload = note;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 230,
+    "wires": [
+      [
+        "b213000000000033"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000033",
+    "type": "http response",
+    "z": "b213000000000001",
+    "name": "ответ создания",
+    "statusCode": "",
+    "headers": {},
+    "x": 630,
+    "y": 230,
+    "wires": []
+  },
+  {
+    "id": "b213000000000041",
+    "type": "http in",
+    "z": "b213000000000001",
+    "name": "PATCH /api/notes/:id",
+    "url": "/api/notes/:id",
+    "method": "patch",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 190,
+    "y": 330,
+    "wires": [
+      [
+        "b213000000000042"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000042",
+    "type": "function",
+    "z": "b213000000000001",
+    "name": "изменить",
+    "func": "const id = Number(msg.req.params.id);\nconst body = msg.payload || {};\nif (!Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Некорректный id' };\n    return msg;\n}\nif (body.title === undefined && body.author === undefined) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Нечего обновлять: укажите title или author' };\n    return msg;\n}\nif (body.title !== undefined && (typeof body.title !== 'string' || !body.title.trim())) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'title должен быть непустой строкой' };\n    return msg;\n}\nif (body.author !== undefined && (typeof body.author !== 'string' || !body.author.trim())) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'author должен быть непустой строкой' };\n    return msg;\n}\nlet notes = flow.get('senkelNotes') || [];\nlet found = null;\nfor (let i = 0; i < notes.length; i++) {\n    if (notes[i].id === id) {\n        if (body.title !== undefined) {\n            notes[i].title = body.title.trim();\n        }\n        if (body.author !== undefined) {\n            notes[i].author = body.author.trim();\n        }\n        found = notes[i];\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Заметка не найдена', id: id };\n    return msg;\n}\nflow.set('senkelNotes', notes);\nmsg.statusCode = 200;\nmsg.payload = found;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 330,
+    "wires": [
+      [
+        "b213000000000043"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000043",
+    "type": "http response",
+    "z": "b213000000000001",
+    "name": "ответ изменения",
+    "statusCode": "",
+    "headers": {},
+    "x": 660,
+    "y": 330,
+    "wires": []
+  },
+  {
+    "id": "b213000000000051",
+    "type": "http in",
+    "z": "b213000000000001",
+    "name": "DELETE /api/notes/:id",
+    "url": "/api/notes/:id",
+    "method": "delete",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 190,
+    "y": 440,
+    "wires": [
+      [
+        "b213000000000052"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000052",
+    "type": "function",
+    "z": "b213000000000001",
+    "name": "удалить",
+    "func": "const id = Number(msg.req.params.id);\nif (!Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Некорректный id' };\n    return msg;\n}\nlet notes = flow.get('senkelNotes') || [];\nlet found = null;\nconst next = [];\nfor (let i = 0; i < notes.length; i++) {\n    if (notes[i].id === id) {\n        found = notes[i];\n    } else {\n        next.push(notes[i]);\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Заметка не найдена', id: id };\n    return msg;\n}\nflow.set('senkelNotes', next);\nmsg.statusCode = 200;\nmsg.payload = { deleted: found };\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 440,
+    "wires": [
+      [
+        "b213000000000053"
+      ]
+    ]
+  },
+  {
+    "id": "b213000000000053",
+    "type": "http response",
+    "z": "b213000000000001",
+    "name": "ответ удаления",
+    "statusCode": "",
+    "headers": {},
+    "x": 650,
+    "y": 440,
+    "wires": []
+  }
+]

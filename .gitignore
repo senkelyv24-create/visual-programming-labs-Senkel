@@ -14,3 +14,8 @@ build_lab1.py
 __pycache__/
 *.pyc
 *.pdf
+_lab2_extract/
+
+# Node-RED runtime for lab2 (flows themselves live in lab2/flows)
+lab2/node_modules/
+lab2/nodered-data/

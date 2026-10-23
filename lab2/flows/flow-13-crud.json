@@ -1,0 +1,255 @@
+[
+    {
+        "id": "b213000000000001",
+        "type": "tab",
+        "label": "13 crud notes",
+        "disabled": false,
+        "info": "Дополнительный CRUD заметок Сенкель (не вместо ачивки). Хранение во flow context: данные живут между запросами. Два поля: title и author.",
+        "env": []
+    },
+    {
+        "id": "b213000000000011",
+        "type": "http in",
+        "z": "b213000000000001",
+        "name": "GET /api/notes",
+        "url": "/api/notes",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 60,
+        "wires": [
+            [
+                "b213000000000012"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000012",
+        "type": "function",
+        "z": "b213000000000001",
+        "name": "список",
+        "func": "let notes = flow.get('senkelNotes');\nif (!Array.isArray(notes)) {\n    notes = [{ id: 1, title: 'Стартовая заметка', author: 'Сенкель' }];\n    flow.set('senkelNotes', notes);\n    flow.set('senkelNotesSeq', 1);\n}\nmsg.statusCode = 200;\nmsg.payload = notes;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 60,
+        "wires": [
+            [
+                "b213000000000013"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000013",
+        "type": "http response",
+        "z": "b213000000000001",
+        "name": "ответ списка",
+        "statusCode": "",
+        "headers": {},
+        "x": 620,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "b213000000000021",
+        "type": "http in",
+        "z": "b213000000000001",
+        "name": "GET /api/notes/:id",
+        "url": "/api/notes/:id",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 140,
+        "wires": [
+            [
+                "b213000000000022"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000022",
+        "type": "function",
+        "z": "b213000000000001",
+        "name": "одна заметка",
+        "func": "const id = Number(msg.req.params.id);\nlet notes = flow.get('senkelNotes') || [];\nif (!Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'id должен быть положительным целым' };\n    return msg;\n}\nlet found = null;\nfor (let i = 0; i < notes.length; i++) {\n    if (notes[i].id === id) {\n        found = notes[i];\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Заметка не найдена', id: id };\n    return msg;\n}\nmsg.statusCode = 200;\nmsg.payload = found;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 140,
+        "wires": [
+            [
+                "b213000000000023"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000023",
+        "type": "http response",
+        "z": "b213000000000001",
+        "name": "ответ заметки",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b213000000000031",
+        "type": "http in",
+        "z": "b213000000000001",
+        "name": "POST /api/notes",
+        "url": "/api/notes",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 230,
+        "wires": [
+            [
+                "b213000000000032"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000032",
+        "type": "function",
+        "z": "b213000000000001",
+        "name": "создать",
+        "func": "const body = msg.payload || {};\nconst title = typeof body.title === 'string' ? body.title.trim() : '';\nconst author = typeof body.author === 'string' ? body.author.trim() : '';\nif (!title || !author) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Нужны непустые поля title и author' };\n    return msg;\n}\nlet notes = flow.get('senkelNotes');\nif (!Array.isArray(notes)) {\n    notes = [];\n}\nlet seq = flow.get('senkelNotesSeq');\nif (typeof seq !== 'number') {\n    seq = 0;\n}\nseq = seq + 1;\nconst note = { id: seq, title: title, author: author };\nnotes.push(note);\nflow.set('senkelNotes', notes);\nflow.set('senkelNotesSeq', seq);\nmsg.statusCode = 201;\nmsg.payload = note;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 230,
+        "wires": [
+            [
+                "b213000000000033"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000033",
+        "type": "http response",
+        "z": "b213000000000001",
+        "name": "ответ создания",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 230,
+        "wires": []
+    },
+    {
+        "id": "b213000000000041",
+        "type": "http in",
+        "z": "b213000000000001",
+        "name": "PATCH /api/notes/:id",
+        "url": "/api/notes/:id",
+        "method": "patch",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 330,
+        "wires": [
+            [
+                "b213000000000042"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000042",
+        "type": "function",
+        "z": "b213000000000001",
+        "name": "изменить",
+        "func": "const id = Number(msg.req.params.id);\nconst body = msg.payload || {};\nif (!Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Некорректный id' };\n    return msg;\n}\nif (body.title === undefined && body.author === undefined) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Нечего обновлять: укажите title или author' };\n    return msg;\n}\nif (body.title !== undefined && (typeof body.title !== 'string' || !body.title.trim())) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'title должен быть непустой строкой' };\n    return msg;\n}\nif (body.author !== undefined && (typeof body.author !== 'string' || !body.author.trim())) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'author должен быть непустой строкой' };\n    return msg;\n}\nlet notes = flow.get('senkelNotes') || [];\nlet found = null;\nfor (let i = 0; i < notes.length; i++) {\n    if (notes[i].id === id) {\n        if (body.title !== undefined) {\n            notes[i].title = body.title.trim();\n        }\n        if (body.author !== undefined) {\n            notes[i].author = body.author.trim();\n        }\n        found = notes[i];\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Заметка не найдена', id: id };\n    return msg;\n}\nflow.set('senkelNotes', notes);\nmsg.statusCode = 200;\nmsg.payload = found;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 330,
+        "wires": [
+            [
+                "b213000000000043"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000043",
+        "type": "http response",
+        "z": "b213000000000001",
+        "name": "ответ изменения",
+        "statusCode": "",
+        "headers": {},
+        "x": 660,
+        "y": 330,
+        "wires": []
+    },
+    {
+        "id": "b213000000000051",
+        "type": "http in",
+        "z": "b213000000000001",
+        "name": "DELETE /api/notes/:id",
+        "url": "/api/notes/:id",
+        "method": "delete",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 440,
+        "wires": [
+            [
+                "b213000000000052"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000052",
+        "type": "function",
+        "z": "b213000000000001",
+        "name": "удалить",
+        "func": "const id = Number(msg.req.params.id);\nif (!Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Некорректный id' };\n    return msg;\n}\nlet notes = flow.get('senkelNotes') || [];\nlet found = null;\nconst next = [];\nfor (let i = 0; i < notes.length; i++) {\n    if (notes[i].id === id) {\n        found = notes[i];\n    } else {\n        next.push(notes[i]);\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Заметка не найдена', id: id };\n    return msg;\n}\nflow.set('senkelNotes', next);\nmsg.statusCode = 200;\nmsg.payload = { deleted: found };\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 440,
+        "wires": [
+            [
+                "b213000000000053"
+            ]
+        ]
+    },
+    {
+        "id": "b213000000000053",
+        "type": "http response",
+        "z": "b213000000000001",
+        "name": "ответ удаления",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 440,
+        "wires": []
+    }
+]

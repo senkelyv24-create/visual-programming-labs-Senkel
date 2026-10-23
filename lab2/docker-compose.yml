@@ -1,0 +1,16 @@
+# Запасной запуск через Docker. На этой машине Docker не ставился:
+# лабораторная запускалась через npm (ачивка 8), см. package.json.
+# Из папки lab2: docker compose up -d
+# Редактор: http://localhost:1880  Dashboard: http://localhost:1880/ui
+services:
+  node-red:
+    image: nodered/node-red:latest
+    container_name: node-red-senkel
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered-data:/data
+      - ./files:/usr/src/node-red/files
+    environment:
+      - TZ=Europe/Minsk
+    restart: unless-stopped
