@@ -1,0 +1,75 @@
+[
+    {
+        "id": "b205000000000001",
+        "type": "tab",
+        "label": "05 template",
+        "disabled": false,
+        "info": "Сенкель. Inject передаёт объект, Mustache-шаблон собирает из него JSON.",
+        "env": []
+    },
+    {
+        "id": "b205000000000002",
+        "type": "inject",
+        "z": "b205000000000001",
+        "name": "объект студента",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/template",
+        "payload": "{\"student\":\"Сенкель\",\"lab\":2,\"topic\":\"Node-RED\"}",
+        "payloadType": "json",
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "b205000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b205000000000003",
+        "type": "template",
+        "z": "b205000000000001",
+        "name": "карточка JSON",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n  \"student\": \"{{payload.student}}\",\n  \"lab\": {{payload.lab}},\n  \"topic\": \"{{payload.topic}}\",\n  \"text\": \"Студент {{payload.student}} сдаёт лабораторную {{payload.lab}}\"\n}\n",
+        "output": "json",
+        "x": 430,
+        "y": 140,
+        "wires": [
+            [
+                "b205000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b205000000000004",
+        "type": "debug",
+        "z": "b205000000000001",
+        "name": "шаблон",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 140,
+        "wires": []
+    }
+]

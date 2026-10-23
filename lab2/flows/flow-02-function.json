@@ -1,0 +1,76 @@
+[
+    {
+        "id": "b202000000000001",
+        "type": "tab",
+        "label": "02 function",
+        "disabled": false,
+        "info": "Сенкель. Function считает среднее оценок: let/const, if/else, цикл for, массив и объект.",
+        "env": []
+    },
+    {
+        "id": "b202000000000002",
+        "type": "inject",
+        "z": "b202000000000001",
+        "name": "оценки",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/function",
+        "payload": "[7,9,6,8,10]",
+        "payloadType": "json",
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "b202000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b202000000000003",
+        "type": "function",
+        "z": "b202000000000001",
+        "name": "среднее Сенкель",
+        "func": "const surname = 'Сенкель';\nlet scores = [7, 9, 6, 8, 10];\nif (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    scores = msg.payload;\n}\nlet sum = 0;\nfor (let i = 0; i < scores.length; i++) {\n    sum += Number(scores[i]);\n}\nconst average = sum / scores.length;\nlet status;\nif (average >= 8) {\n    status = 'отлично';\n} else {\n    status = 'нужно подтянуть';\n}\nmsg.topic = 'lab2/senkel/function';\nmsg.payload = {\n    student: surname,\n    scores: scores,\n    average: Math.round(average * 10) / 10,\n    status: status\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 140,
+        "wires": [
+            [
+                "b202000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b202000000000004",
+        "type": "debug",
+        "z": "b202000000000001",
+        "name": "результат",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 140,
+        "wires": []
+    }
+]

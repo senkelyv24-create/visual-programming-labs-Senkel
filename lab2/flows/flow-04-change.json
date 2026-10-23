@@ -1,0 +1,97 @@
+[
+    {
+        "id": "b204000000000001",
+        "type": "tab",
+        "label": "04 change",
+        "disabled": false,
+        "info": "Сенкель. Change задаёт topic, текущее время в msg.timestamp и новый payload.",
+        "env": []
+    },
+    {
+        "id": "b204000000000002",
+        "type": "inject",
+        "z": "b204000000000001",
+        "name": "запуск",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "до-change",
+        "payload": "исходное значение",
+        "payloadType": "str",
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "b204000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b204000000000003",
+        "type": "change",
+        "z": "b204000000000001",
+        "name": "topic, время, payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "lab2/senkel/change",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Сенкель — лабораторная Node-RED",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 140,
+        "wires": [
+            [
+                "b204000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b204000000000004",
+        "type": "debug",
+        "z": "b204000000000001",
+        "name": "полное сообщение",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 140,
+        "wires": []
+    }
+]

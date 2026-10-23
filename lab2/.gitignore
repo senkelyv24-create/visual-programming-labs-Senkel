@@ -1,0 +1,3 @@
+# Данные Node-RED: установленные ноды и credentials (токен Telegram-бота)
+node_modules/
+nodered-data/

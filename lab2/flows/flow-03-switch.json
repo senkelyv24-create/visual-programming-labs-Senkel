@@ -1,0 +1,153 @@
+[
+    {
+        "id": "b203000000000001",
+        "type": "tab",
+        "label": "03 switch",
+        "disabled": false,
+        "info": "Сенкель. Switch ветвит msg.payload: «отлично» идёт на первый debug, всё остальное — на второй.",
+        "env": []
+    },
+    {
+        "id": "b203000000000002",
+        "type": "inject",
+        "z": "b203000000000001",
+        "name": "высокие оценки",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/switch",
+        "payload": "[9,10,8,9]",
+        "payloadType": "json",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "b203000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b203000000000003",
+        "type": "inject",
+        "z": "b203000000000001",
+        "name": "низкие оценки",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/switch",
+        "payload": "[4,5,6]",
+        "payloadType": "json",
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "b203000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b203000000000004",
+        "type": "function",
+        "z": "b203000000000001",
+        "name": "оценка словами",
+        "func": "const surname = 'Сенкель';\nlet scores = [9, 10, 8];\nif (Array.isArray(msg.payload) && msg.payload.length > 0) {\n    scores = msg.payload;\n}\nlet sum = 0;\nfor (let i = 0; i < scores.length; i++) {\n    sum += Number(scores[i]);\n}\nconst average = sum / scores.length;\nlet mark;\nif (average >= 8) {\n    mark = 'отлично';\n} else {\n    mark = 'нужно подтянуть';\n}\nmsg.topic = 'lab2/senkel/switch';\nmsg.student = surname;\nmsg.average = Math.round(average * 10) / 10;\nmsg.payload = mark;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 150,
+        "wires": [
+            [
+                "b203000000000005"
+            ]
+        ]
+    },
+    {
+        "id": "b203000000000005",
+        "type": "switch",
+        "z": "b203000000000001",
+        "name": "по payload",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "отлично",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 640,
+        "y": 150,
+        "wires": [
+            [
+                "b203000000000006"
+            ],
+            [
+                "b203000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "b203000000000006",
+        "type": "debug",
+        "z": "b203000000000001",
+        "name": "ветка: отлично",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b203000000000007",
+        "type": "debug",
+        "z": "b203000000000001",
+        "name": "ветка: нужно подтянуть",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 210,
+        "wires": []
+    }
+]

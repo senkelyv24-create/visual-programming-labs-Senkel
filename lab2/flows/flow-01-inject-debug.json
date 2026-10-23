@@ -1,0 +1,56 @@
+[
+    {
+        "id": "b201000000000001",
+        "type": "tab",
+        "label": "01 inject-debug",
+        "disabled": false,
+        "info": "Сенкель. Inject каждые 5 секунд: payload — фамилия, topic — lab2/senkel/basic. Debug показывает всё сообщение.",
+        "env": []
+    },
+    {
+        "id": "b201000000000002",
+        "type": "inject",
+        "z": "b201000000000001",
+        "name": "Сенкель / 5 секунд",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "lab2/senkel/basic",
+        "payload": "Сенкель",
+        "payloadType": "str",
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "b201000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b201000000000003",
+        "type": "debug",
+        "z": "b201000000000001",
+        "name": "полное сообщение",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 140,
+        "wires": []
+    }
+]

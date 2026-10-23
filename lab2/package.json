@@ -1,0 +1,13 @@
+{
+  "name": "lab2-node-red",
+  "private": true,
+  "description": "Локальный Node-RED для лабораторной №2 (Сенкель). Docker на машине не установлен, поэтому используется npm — это ачивка 8.",
+  "scripts": {
+    "start": "node-red --userDir ./nodered-data"
+  },
+  "dependencies": {
+    "node-red": "^4.1.0",
+    "node-red-contrib-telegrambot": "^16.4.0",
+    "node-red-dashboard": "^3.6.5"
+  }
+}
