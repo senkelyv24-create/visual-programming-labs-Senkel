@@ -6,7 +6,7 @@
 
 Docker на компьютере не установлен, поэтому Node-RED поставлен через npm в папке `lab2`. Это ачивка 8: локальный запуск без контейнера.
 
-- Запуск: `npm install`, затем `npm start` (`node-red --userDir ./nodered-data`).
+- Запуск: `npm install`, затем `npm start`. Скрипт поднимает Node-RED с системным хранилищем сертификатов, иначе запросы к Telegram не проходят.
 - Каталог данных: `lab2/nodered-data`. Он в `.gitignore`, потому что там лежат установленные пакеты и `flows_cred.json` с токеном бота.
 - Редактор: http://localhost:1880 , панель: http://localhost:1880/ui .
 - **Node.js:** v22.20.0
@@ -33,7 +33,7 @@ Docker на компьютере не установлен, поэтому Node-
    - Свои GET: `/api/text`, `/api/info`, `/api/items/:id` с query `status`. Коды 200, 400 и 404. Описание — в [api.md](api.md).
 3. **Интерфейс и бот**
    - Dashboard: вкладка «Сенкель Lab2», группа «Датчик Сенкель», gauge и chart. Inject раз в 2 секунды имитирует температуру.
-   - Бот `tvl_lab2_senkel_bot`: `/start`, `/status` и эхо обычного текста. Токен из BotFather вводится в config-ноде и в репозиторий не кладётся. Пока токен не вставлен, ноды пишут `bot not initialized`.
+   - Бот `tvl_lab2_senkel_bot`: `/start`, `/status` и эхо обычного текста с префиксом «Сенкель: ». Токен из BotFather лежит в config-ноде и в репозиторий не кладётся. На нодах статус `connected`.
 4. **Файл и контекст**
    - Запись и чтение `lab2/files/senkel-lab2.txt`. Строка дописывается, файл остаётся после перезапуска Node-RED.
    - Flow context: счётчик `senkelCounter` увеличивается отдельным inject и читается другим. Значение живёт между сообщениями.
@@ -75,7 +75,8 @@ Docker на компьютере не установлен, поэтому Node-
 | 2.8 GET /api/items/1 | ![08-3](../screenshots/08-endpoints_3.png) |
 | 2.8 Ошибка 400 / 404 | ![08-4](../screenshots/08-endpoints_4.png) |
 | 2.9 Dashboard | ![09](../screenshots/09-dashboard.png) |
-| 2.10 Telegram | ![10](../screenshots/10-telegram.png) |
+| 2.10 Telegram, поток | ![10](../screenshots/10-telegram.png) |
+| 2.10 Telegram, чат | ![10-чат](../screenshots/10-telegram-chat.png) |
 | 2.11 Файл | ![11](../screenshots/11-files.png) |
 | 2.12 Flow context | ![12](../screenshots/12-context.png) |
 
