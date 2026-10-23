@@ -1,0 +1,157 @@
+[
+    {
+        "id": "b208000000000001",
+        "type": "tab",
+        "label": "08 endpoints",
+        "disabled": false,
+        "info": "Сенкель. GET /api/text, /api/info и /api/items/:id. У третьего есть 400 и 404.",
+        "env": []
+    },
+    {
+        "id": "b208000000000002",
+        "type": "http in",
+        "z": "b208000000000001",
+        "name": "GET /api/text",
+        "url": "/api/text",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "b208000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b208000000000003",
+        "type": "function",
+        "z": "b208000000000001",
+        "name": "текст",
+        "func": "msg.headers = { 'Content-Type': 'text/plain; charset=utf-8' };\nmsg.payload = 'Сенкель: лабораторная работа 2, Node-RED';\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 80,
+        "wires": [
+            [
+                "b208000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b208000000000004",
+        "type": "http response",
+        "z": "b208000000000001",
+        "name": "ответ text",
+        "statusCode": "",
+        "headers": {},
+        "x": 620,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b208000000000005",
+        "type": "http in",
+        "z": "b208000000000001",
+        "name": "GET /api/info",
+        "url": "/api/info",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 180,
+        "wires": [
+            [
+                "b208000000000006"
+            ]
+        ]
+    },
+    {
+        "id": "b208000000000006",
+        "type": "function",
+        "z": "b208000000000001",
+        "name": "json info",
+        "func": "msg.payload = {\n    student: 'Сенкель',\n    tool: 'Node-RED'\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 180,
+        "wires": [
+            [
+                "b208000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "b208000000000007",
+        "type": "http response",
+        "z": "b208000000000001",
+        "name": "ответ info",
+        "statusCode": "",
+        "headers": {},
+        "x": 620,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "b208000000000008",
+        "type": "http in",
+        "z": "b208000000000001",
+        "name": "GET /api/items/:id",
+        "url": "/api/items/:id",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 320,
+        "wires": [
+            [
+                "b208000000000009"
+            ]
+        ]
+    },
+    {
+        "id": "b208000000000009",
+        "type": "function",
+        "z": "b208000000000001",
+        "name": "элемент по id",
+        "func": "const idRaw = msg.req.params.id;\nconst status = msg.req.query.status;\nconst id = Number(idRaw);\nconst allowed = ['active', 'draft'];\nconst items = [\n    { id: 1, name: 'inject-debug', owner: 'Сенкель', status: 'active' },\n    { id: 2, name: 'mqtt', owner: 'Сенкель', status: 'active' },\n    { id: 3, name: 'dashboard', owner: 'Сенкель', status: 'draft' }\n];\nif (!idRaw || !Number.isInteger(id) || id < 1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Некорректный id', student: 'Сенкель' };\n    return msg;\n}\nif (status && allowed.indexOf(status) === -1) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'Недопустимый status', allowed: allowed };\n    return msg;\n}\nlet found = null;\nfor (let i = 0; i < items.length; i++) {\n    if (items[i].id === id) {\n        if (!status || items[i].status === status) {\n            found = items[i];\n        }\n    }\n}\nif (!found) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Элемент не найден', id: id };\n    return msg;\n}\nmsg.statusCode = 200;\nmsg.payload = found;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 320,
+        "wires": [
+            [
+                "b20800000000000a"
+            ]
+        ]
+    },
+    {
+        "id": "b20800000000000a",
+        "type": "http response",
+        "z": "b208000000000001",
+        "name": "ответ items",
+        "statusCode": "",
+        "headers": {},
+        "x": 660,
+        "y": 320,
+        "wires": []
+    }
+]

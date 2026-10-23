@@ -1,0 +1,145 @@
+[
+    {
+        "id": "b207000000000001",
+        "type": "tab",
+        "label": "07 mqtt",
+        "disabled": false,
+        "info": "Сенкель. Публикация случайной температуры в student/senkel/lab2/temperature на broker.hivemq.com и приём того же топика.",
+        "env": []
+    },
+    {
+        "id": "b207000000000010",
+        "type": "mqtt-broker",
+        "name": "HiveMQ public",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "senkel-lab2",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "b207000000000002",
+        "type": "inject",
+        "z": "b207000000000001",
+        "name": "датчик / 5 секунд",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "student/senkel/lab2/temperature",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "b207000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b207000000000003",
+        "type": "function",
+        "z": "b207000000000001",
+        "name": "случайная температура",
+        "func": "const value = Math.round((18 + Math.random() * 10) * 10) / 10;\nmsg.payload = {\n    student: 'Сенкель',\n    sensor: 'temperature',\n    value: value\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "b207000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b207000000000004",
+        "type": "mqtt out",
+        "z": "b207000000000001",
+        "name": "публикация",
+        "topic": "student/senkel/lab2/temperature",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "b207000000000010",
+        "x": 680,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b207000000000005",
+        "type": "mqtt in",
+        "z": "b207000000000001",
+        "name": "подписка",
+        "topic": "student/senkel/lab2/temperature",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "b207000000000010",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "b207000000000006"
+            ]
+        ]
+    },
+    {
+        "id": "b207000000000006",
+        "type": "debug",
+        "z": "b207000000000001",
+        "name": "принято из MQTT",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 430,
+        "y": 240,
+        "wires": []
+    }
+]
