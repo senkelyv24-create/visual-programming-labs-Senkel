@@ -1,0 +1,142 @@
+[
+    {
+        "id": "b212000000000001",
+        "type": "tab",
+        "label": "12 context",
+        "disabled": false,
+        "info": "Сенкель. Счётчик в flow context: значение живёт между сообщениями. Контекст сохранён на диск (localfilesystem), поэтому переживает перезапуск Node-RED.",
+        "env": []
+    },
+    {
+        "id": "b212000000000002",
+        "type": "inject",
+        "z": "b212000000000001",
+        "name": "увеличить счётчик",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/context",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "b212000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b212000000000003",
+        "type": "function",
+        "z": "b212000000000001",
+        "name": "flow context +1",
+        "func": "let count = flow.get('senkelCounter');\nif (typeof count !== 'number') {\n    count = 0;\n}\ncount = count + 1;\nflow.set('senkelCounter', count);\nmsg.payload = {\n    student: 'Сенкель',\n    counter: count,\n    source: 'flow context'\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 100,
+        "wires": [
+            [
+                "b212000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b212000000000004",
+        "type": "debug",
+        "z": "b212000000000001",
+        "name": "после увеличения",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b212000000000005",
+        "type": "inject",
+        "z": "b212000000000001",
+        "name": "прочитать счётчик",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/context-read",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 240,
+        "wires": [
+            [
+                "b212000000000006"
+            ]
+        ]
+    },
+    {
+        "id": "b212000000000006",
+        "type": "function",
+        "z": "b212000000000001",
+        "name": "прочитать flow context",
+        "func": "const count = flow.get('senkelCounter');\nmsg.payload = {\n    student: 'Сенкель',\n    counter: count,\n    note: 'значение сохранилось между сообщениями'\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 240,
+        "wires": [
+            [
+                "b212000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "b212000000000007",
+        "type": "debug",
+        "z": "b212000000000001",
+        "name": "прочитано",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 240,
+        "wires": []
+    }
+]

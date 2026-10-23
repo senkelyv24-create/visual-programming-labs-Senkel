@@ -1,0 +1,175 @@
+[
+    {
+        "id": "b210000000000001",
+        "type": "tab",
+        "label": "10 telegram",
+        "disabled": false,
+        "info": "Сенкель. Бот tvl_lab2_senkel_bot: /start, /status и эхо на обычный текст. Токен BotFather вводится в конфиг ноды и в репозиторий не кладётся.",
+        "env": []
+    },
+    {
+        "id": "b210000000000010",
+        "type": "telegram bot",
+        "botname": "tvl_lab2_senkel_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "addressfamily": "",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "b210000000000002",
+        "type": "telegram command",
+        "z": "b210000000000001",
+        "name": "/start",
+        "command": "/start",
+        "description": "Запуск бота",
+        "registercommand": true,
+        "language": "ru",
+        "scope": "default",
+        "bot": "b210000000000010",
+        "strict": false,
+        "hasresponse": false,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 1,
+        "x": 180,
+        "y": 80,
+        "wires": [
+            [
+                "b210000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b210000000000003",
+        "type": "function",
+        "z": "b210000000000001",
+        "name": "ответ /start",
+        "func": "msg.payload = {\n    chatId: msg.payload.chatId,\n    type: 'message',\n    content: 'Привет. Это tvl_lab2_senkel_bot. Студент Сенкель, лабораторная Node-RED. Напиши сообщение — я повторю его. Команда /status показывает, что бот на связи.'\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 80,
+        "wires": [
+            [
+                "b210000000000008"
+            ]
+        ]
+    },
+    {
+        "id": "b210000000000004",
+        "type": "telegram command",
+        "z": "b210000000000001",
+        "name": "/status",
+        "command": "/status",
+        "description": "Проверка бота",
+        "registercommand": true,
+        "language": "ru",
+        "scope": "default",
+        "bot": "b210000000000010",
+        "strict": false,
+        "hasresponse": false,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 1,
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "b210000000000005"
+            ]
+        ]
+    },
+    {
+        "id": "b210000000000005",
+        "type": "function",
+        "z": "b210000000000001",
+        "name": "ответ /status",
+        "func": "msg.payload = {\n    chatId: msg.payload.chatId,\n    type: 'message',\n    content: 'Бот tvl_lab2_senkel_bot на связи. Поток lab2/senkel/telegram.'\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 180,
+        "wires": [
+            [
+                "b210000000000008"
+            ]
+        ]
+    },
+    {
+        "id": "b210000000000006",
+        "type": "telegram receiver",
+        "z": "b210000000000001",
+        "name": "входящие",
+        "bot": "b210000000000010",
+        "saveDataDir": "",
+        "filterCommands": true,
+        "x": 170,
+        "y": 300,
+        "wires": [
+            [
+                "b210000000000007"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b210000000000007",
+        "type": "function",
+        "z": "b210000000000001",
+        "name": "эхо",
+        "func": "const incoming = msg.payload || {};\nconst text = incoming.content || '';\nif (!text || incoming.type !== 'message') {\n    return null;\n}\nmsg.payload = {\n    chatId: incoming.chatId,\n    type: 'message',\n    content: 'Сенкель: ' + text\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 300,
+        "wires": [
+            [
+                "b210000000000008"
+            ]
+        ]
+    },
+    {
+        "id": "b210000000000008",
+        "type": "telegram sender",
+        "z": "b210000000000001",
+        "name": "отправить",
+        "bot": "b210000000000010",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 660,
+        "y": 180,
+        "wires": []
+    }
+]

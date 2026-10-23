@@ -1,0 +1,161 @@
+[
+    {
+        "id": "b211000000000001",
+        "type": "tab",
+        "label": "11 files",
+        "disabled": false,
+        "info": "Сенкель. Запись строки в lab2/files/senkel-lab2.txt и чтение файла обратно. Файл лежит на диске и переживает перезапуск Node-RED.",
+        "env": []
+    },
+    {
+        "id": "b211000000000002",
+        "type": "inject",
+        "z": "b211000000000001",
+        "name": "записать строку",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/file",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "b211000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b211000000000003",
+        "type": "function",
+        "z": "b211000000000001",
+        "name": "строка журнала",
+        "func": "const stamp = new Date().toISOString();\nmsg.payload = 'Сенкель;lab2;file;' + stamp;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 100,
+        "wires": [
+            [
+                "b211000000000004"
+            ]
+        ]
+    },
+    {
+        "id": "b211000000000004",
+        "type": "file",
+        "z": "b211000000000001",
+        "name": "дописать файл",
+        "filename": "files/senkel-lab2.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 660,
+        "y": 100,
+        "wires": [
+            [
+                "b211000000000005"
+            ]
+        ]
+    },
+    {
+        "id": "b211000000000005",
+        "type": "debug",
+        "z": "b211000000000001",
+        "name": "записано",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b211000000000006",
+        "type": "inject",
+        "z": "b211000000000001",
+        "name": "прочитать файл",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/senkel/file-read",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 240,
+        "wires": [
+            [
+                "b211000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "b211000000000007",
+        "type": "file in",
+        "z": "b211000000000001",
+        "name": "чтение файла",
+        "filename": "files/senkel-lab2.txt",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 430,
+        "y": 240,
+        "wires": [
+            [
+                "b211000000000008"
+            ]
+        ]
+    },
+    {
+        "id": "b211000000000008",
+        "type": "debug",
+        "z": "b211000000000001",
+        "name": "содержимое",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 240,
+        "wires": []
+    }
+]
