@@ -1,0 +1,101 @@
+{
+  "name": "lab4 senkel set fields",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "3e656dd9-8e6a-436e-b672-5f36ca0480e8",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "91e5eb8e-2b70-4b1c-9602-56d0540a4252",
+              "name": "topic",
+              "value": "lab4/senkel/set",
+              "type": "string"
+            },
+            {
+              "id": "1c945576-20d7-4677-a04e-d53912c819d8",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "2ebdac4d-a94f-4b20-86c6-e021d1444f57",
+              "name": "payload",
+              "value": "Senkel",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c45d497b-f7f9-4c10-b0d4-544c33403954",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const msg = $input.first().json;\nconsole.log('complete msg', JSON.stringify(msg));\nreturn [{ json: { student: 'Senkel', msg } }];\n"
+      },
+      "id": "cc5f6d82-92f1-462d-a621-ace2fa79eb35",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bdf814e2-5358-49cf-bd87-08c2371d9799",
+  "meta": null,
+  "id": "oPLlPBIbKordJuh1",
+  "tags": []
+}
