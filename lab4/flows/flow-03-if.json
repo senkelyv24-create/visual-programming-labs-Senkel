@@ -1,0 +1,137 @@
+{
+  "name": "lab4 senkel if",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2b9c0ad1-9f87-48a9-9e1c-a6974696bd43",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const plants = ['Алоэ', 'Монстера', 'Фикус'];\nlet watered = 0;\nconst notes = [];\nfor (let i = 0; i < plants.length; i++) {\n  const name = plants[i];\n  if (name === 'Фикус') {\n    watered = watered + 1;\n    notes.push({ name, status: 'полит' });\n  } else {\n    notes.push({ name, status: 'ждёт' });\n  }\n}\nconst payload = watered > 0 ? 'Senkel' : 'empty';\nreturn [{ json: { payload, student: 'Senkel', watered, notes } }];\n"
+      },
+      "id": "20c10469-fa1a-482d-b0c0-5657795f6ef2",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3084d5fd-74e3-45a4-ad86-e1b511312b9d",
+              "leftValue": "={{ $json.payload }}",
+              "rightValue": "Senkel",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c1ce63bd-5167-4193-a282-4e1122c728b7",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a2f89183-529e-43c4-8abf-f7ed5356ec38",
+      "name": "Совпало",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        980,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "312c33b1-48c5-48c6-9987-63be24f1f4e1",
+      "name": "Не совпало",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        980,
+        420
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Совпало",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Не совпало",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "68265dbe-8f24-4eac-9548-0b6f64cfcfd8",
+  "meta": null,
+  "id": "BLDURSn3NiP4WxdM",
+  "tags": []
+}

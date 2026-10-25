@@ -1,0 +1,75 @@
+{
+  "name": "lab4 senkel code",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "27e67c32-d220-4f38-a7b1-df8f0ec80b10",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const plants = ['Алоэ', 'Монстера', 'Фикус'];\nlet watered = 0;\nconst notes = [];\nfor (let i = 0; i < plants.length; i++) {\n  const name = plants[i];\n  if (name === 'Фикус') {\n    watered = watered + 1;\n    notes.push({ name, status: 'полит' });\n  } else {\n    notes.push({ name, status: 'ждёт' });\n  }\n}\nconst summary = { student: 'Senkel', watered, notes };\nreturn [{ json: { payload: summary } }];\n"
+      },
+      "id": "7dc3031f-57b7-49cf-8f6c-05cb33e1122e",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3f37e80e-2e95-4f79-bbe3-ddbf9a662594",
+      "name": "NoOp",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "NoOp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3e8289b0-8529-46fe-a0f2-366ca3e0cb1b",
+  "meta": null,
+  "id": "jUVmFCurGn5IOWa7",
+  "tags": []
+}

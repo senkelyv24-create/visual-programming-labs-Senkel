@@ -1,0 +1,95 @@
+{
+  "name": "lab4 senkel manual set",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a0241454-a1a0-4d53-bb36-4f420a3681df",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "286a912f-919a-4bc8-a0a3-77da7429c118",
+              "name": "payload",
+              "value": "Senkel",
+              "type": "string"
+            },
+            {
+              "id": "94a52cb8-49f1-4cad-871b-efe99ab172a9",
+              "name": "topic",
+              "value": "lab4/senkel/basic",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fec23c8f-92d8-4217-8878-02311b241848",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "const item = $input.first().json;\nconst payload = item.payload;\nconst topic = item.topic;\nconsole.log('lab4/senkel', payload, topic);\nreturn [{ json: { payload, topic, student: 'Senkel' } }];\n"
+      },
+      "id": "55906b1c-235c-4859-b837-461a6c3c27e5",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0529710a-a499-481a-b76c-30df9592cb7a",
+  "meta": null,
+  "id": "32urwkCCQDCwGKUq",
+  "tags": []
+}
