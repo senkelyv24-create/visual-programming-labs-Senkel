@@ -1,0 +1,95 @@
+{
+  "name": "lab4 senkel redis set",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ac3f997e-7ec4-4229-96d9-bd90c998b351",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "senkel",
+        "value": "Сенкель: Зелёный подоконник, фикус 200 мл",
+        "keyType": "string",
+        "expire": false
+      },
+      "id": "66c812ba-328d-4a76-9d10-0e87c5b11723",
+      "name": "Redis Set",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ],
+      "credentials": {
+        "redis": {
+          "id": "J9pqby2q44JVXDuU",
+          "name": "Redis senkel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "value",
+        "key": "senkel",
+        "keyType": "string",
+        "options": {}
+      },
+      "id": "1c7feadc-df0e-4134-ad3d-9e52799a1ea9",
+      "name": "Redis Get",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        760,
+        300
+      ],
+      "credentials": {
+        "redis": {
+          "id": "J9pqby2q44JVXDuU",
+          "name": "Redis senkel"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Redis Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Set": {
+      "main": [
+        [
+          {
+            "node": "Redis Get",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6af37eee-06fb-4d91-992d-efefd23da081",
+  "meta": null,
+  "id": "F8NauHDht2shK5eo",
+  "tags": []
+}

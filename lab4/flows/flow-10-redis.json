@@ -1,0 +1,90 @@
+{
+  "name": "lab4 senkel redis delete",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "15403b52-f7b7-4adb-beaa-6613f8c4f867",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "senkel"
+      },
+      "id": "11bc7750-872b-4607-8f32-7e2fa341c933",
+      "name": "Redis Delete",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ],
+      "credentials": {
+        "redis": {
+          "id": "J9pqby2q44JVXDuU",
+          "name": "Redis senkel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "keys",
+        "keyPattern": "senkel",
+        "getValues": false
+      },
+      "id": "160bd8f6-ebb8-481e-8e5c-e80756d9b507",
+      "name": "Redis Exists",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        760,
+        300
+      ],
+      "credentials": {
+        "redis": {
+          "id": "J9pqby2q44JVXDuU",
+          "name": "Redis senkel"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Redis Delete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Delete": {
+      "main": [
+        [
+          {
+            "node": "Redis Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b86a222f-98a0-4172-aaaa-6aa887d71768",
+  "meta": null,
+  "id": "VXskBhry3wrRSW22",
+  "tags": []
+}
