@@ -1,0 +1,11 @@
+{
+  "name": "lab4-senkel",
+  "private": true,
+  "description": "Лабораторная 4, n8n. Локальный запуск, если Docker недоступен.",
+  "scripts": {
+    "start": "n8n start"
+  },
+  "dependencies": {
+    "n8n": "1.114.4"
+  }
+}

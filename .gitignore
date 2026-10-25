@@ -15,7 +15,15 @@ __pycache__/
 *.pyc
 *.pdf
 _lab2_extract/
+_lab3_extract/
 
 # Node-RED runtime for lab2 (flows themselves live in lab2/flows)
 lab2/node_modules/
 lab2/nodered-data/
+
+# n8n / Redis runtime for lab4 (flows themselves live in lab4/flows)
+lab4/node_modules/
+lab4/n8n-data/
+lab4/data/
+lab4/.tools/
+lab4/.env
