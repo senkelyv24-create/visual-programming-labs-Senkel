@@ -1,0 +1,57 @@
+# TypeBot (self-hosted) для лабораторной №5 (Сенкель)
+# На этом компьютере Docker не установлен, файл лежит по условию трека C.
+# Когда Docker появится, из папки lab5: docker compose up -d
+# Редактор: http://localhost:8080
+# Опубликованные боты: http://127.0.0.1:8081
+# Почта для входа: http://localhost:8025
+x-typebot-env: &typebot-env
+  DATABASE_URL: postgresql://typebot:typebot@typebot-db:5432/typebot
+  NEXTAUTH_URL: http://localhost:8080
+  NEXT_PUBLIC_VIEWER_URL: http://127.0.0.1:8081
+  ENCRYPTION_SECRET: ${ENCRYPTION_SECRET}
+  ADMIN_EMAIL: senkel@lab5.local
+  DEFAULT_WORKSPACE_PLAN: UNLIMITED
+  DISABLE_SIGNUP: "false"
+  SMTP_HOST: mailpit
+  SMTP_PORT: "1025"
+  SMTP_SECURE: "false"
+  SMTP_IGNORE_TLS: "true"
+  NEXT_PUBLIC_SMTP_FROM: "TypeBot Lab5 <typebot@lab5.local>"
+  TZ: Europe/Minsk
+
+services:
+  typebot-db:
+    image: postgres:16
+    container_name: typebot-db-senkel
+    environment:
+      POSTGRES_USER: typebot
+      POSTGRES_PASSWORD: typebot
+      POSTGRES_DB: typebot
+    volumes:
+      - ./typebot-db:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  typebot-builder:
+    image: baptistearno/typebot-builder:latest
+    container_name: typebot-builder-senkel
+    depends_on: [typebot-db, mailpit]
+    ports:
+      - "8080:3000"
+    environment: *typebot-env
+    restart: unless-stopped
+
+  typebot-viewer:
+    image: baptistearno/typebot-viewer:latest
+    container_name: typebot-viewer-senkel
+    depends_on: [typebot-db]
+    ports:
+      - "8081:3000"
+    environment: *typebot-env
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit-senkel
+    ports:
+      - "8025:8025"
+    restart: unless-stopped
