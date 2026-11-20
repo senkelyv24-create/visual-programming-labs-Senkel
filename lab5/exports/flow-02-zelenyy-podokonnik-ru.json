@@ -1,0 +1,638 @@
+{
+  "version": "6.1",
+  "name": "lab5-Сенкель Зелёный подоконник",
+  "icon": "🪴",
+  "events": [
+    {
+      "id": "s0008senkel",
+      "type": "start",
+      "outgoingEdgeId": "e-start",
+      "graphCoordinates": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "g0012senkel",
+      "title": "Приветствие",
+      "blocks": [
+        {
+          "id": "b0009senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Добро пожаловать в «Зелёный подоконник» — Сенкель 👋"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0010senkel",
+          "type": "choice input",
+          "items": [
+            {
+              "id": "i0011senkel",
+              "content": "Привет!"
+            }
+          ],
+          "outgoingEdgeId": "e-hello"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 0,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0015senkel",
+      "title": "Имя",
+      "blocks": [
+        {
+          "id": "b0013senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Как вас зовут?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0014senkel",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "button": "Отправить",
+              "placeholder": "Введите ваше имя..."
+            },
+            "variableId": "v0001senkel"
+          },
+          "outgoingEdgeId": "e-http"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 400,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0019senkel",
+      "title": "Погода (HTTP)",
+      "blocks": [
+        {
+          "id": "b0016senkel",
+          "type": "Webhook",
+          "options": {
+            "webhook": {
+              "url": "https://api.open-meteo.com/v1/forecast?latitude=53.68&longitude=23.83&current=temperature_2m",
+              "method": "GET"
+            },
+            "responseVariableMapping": [
+              {
+                "id": "m0017senkel",
+                "bodyPath": "data.current.temperature_2m",
+                "variableId": "v0005senkel"
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0018senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{Имя}}, сейчас в Гродно {{Температура}} °C. От этого зависит, насколько близко к окну ставить горшок."
+                  }
+                ]
+              }
+            ]
+          },
+          "outgoingEdgeId": "e-task"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 800,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0025senkel",
+      "title": "Задача",
+      "blocks": [
+        {
+          "id": "b0020senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "С чем помочь растению?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0021senkel",
+          "type": "choice input",
+          "items": [
+            {
+              "id": "i0022senkel",
+              "content": "Полив"
+            },
+            {
+              "id": "i0023senkel",
+              "content": "Свет"
+            },
+            {
+              "id": "i0024senkel",
+              "content": "Пересадка"
+            }
+          ],
+          "outgoingEdgeId": "e-days",
+          "options": {
+            "variableId": "v0003senkel"
+          }
+        }
+      ],
+      "graphCoordinates": {
+        "x": 1200,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0031senkel",
+      "title": "Дни без полива",
+      "blocks": [
+        {
+          "id": "b0030senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Сколько дней растение уже без полива?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0026senkel",
+          "type": "number input",
+          "options": {
+            "labels": {
+              "button": "Отправить",
+              "placeholder": "Сколько дней без полива..."
+            },
+            "variableId": "v0004senkel"
+          }
+        },
+        {
+          "id": "b0028senkel",
+          "type": "Condition",
+          "items": [
+            {
+              "id": "i0027senkel",
+              "content": {
+                "comparisons": [
+                  {
+                    "id": "c0029senkel",
+                    "value": "7",
+                    "variableId": "v0004senkel",
+                    "comparisonOperator": "Greater than"
+                  }
+                ]
+              },
+              "outgoingEdgeId": "e-soon"
+            }
+          ],
+          "outgoingEdgeId": "e-wait"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 1600,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0034senkel",
+      "title": "Режим: полить",
+      "blocks": [
+        {
+          "id": "b0033senkel",
+          "type": "Set variable",
+          "options": {
+            "variableId": "v0006senkel",
+            "expressionToEvaluate": "полить сегодня"
+          }
+        },
+        {
+          "id": "b0032senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Больше 7 дней без воды — режим «{{Режим}}»."
+                  }
+                ]
+              }
+            ]
+          },
+          "outgoingEdgeId": "e-mail"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 2000,
+        "y": 40
+      }
+    },
+    {
+      "id": "g0037senkel",
+      "title": "Режим: подождать",
+      "blocks": [
+        {
+          "id": "b0036senkel",
+          "type": "Set variable",
+          "options": {
+            "variableId": "v0006senkel",
+            "expressionToEvaluate": "полив не срочный"
+          }
+        },
+        {
+          "id": "b0035senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "7 дней или меньше — режим «{{Режим}}»."
+                  }
+                ]
+              }
+            ]
+          },
+          "outgoingEdgeId": "e-mail-wait"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 2000,
+        "y": 420
+      }
+    },
+    {
+      "id": "g0040senkel",
+      "title": "Email",
+      "blocks": [
+        {
+          "id": "b0038senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "На какой email прислать памятку?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0039senkel",
+          "type": "email input",
+          "options": {
+            "labels": {
+              "button": "Отправить",
+              "placeholder": "Введите ваш email..."
+            },
+            "variableId": "v0002senkel",
+            "retryMessageContent": "Похоже, в email есть ошибка. Попробуйте ввести его ещё раз."
+          },
+          "outgoingEdgeId": "e-more"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 2400,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0043senkel",
+      "title": "Подробности",
+      "blocks": [
+        {
+          "id": "b0042senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Расскажите чуть подробнее о растении."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0041senkel",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "button": "Отправить",
+              "placeholder": "Например: фикус у северного окна..."
+            },
+            "variableId": "v0007senkel"
+          },
+          "outgoingEdgeId": "e-end"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 2800,
+        "y": 180
+      }
+    },
+    {
+      "id": "g0047senkel",
+      "title": "Итог",
+      "blocks": [
+        {
+          "id": "b0044senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Заявка принята."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0045senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{Имя}}, задача: {{Проблема}}. Без полива {{Дни}} дн. Режим: {{Режим}}. Напишем на {{Email}}."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0046senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "ТВП: Сенкель"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "graphCoordinates": {
+        "x": 3200,
+        "y": 180
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "v0001senkel",
+      "name": "Имя",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0002senkel",
+      "name": "Email",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0003senkel",
+      "name": "Проблема",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0004senkel",
+      "name": "Дни",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0005senkel",
+      "name": "Температура",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0006senkel",
+      "name": "Режим",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0007senkel",
+      "name": "Заметка",
+      "isSessionVariable": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-start",
+      "to": {
+        "groupId": "g0012senkel"
+      },
+      "from": {
+        "eventId": "s0008senkel"
+      }
+    },
+    {
+      "id": "e-hello",
+      "to": {
+        "groupId": "g0015senkel"
+      },
+      "from": {
+        "blockId": "b0010senkel"
+      }
+    },
+    {
+      "id": "e-http",
+      "to": {
+        "groupId": "g0019senkel"
+      },
+      "from": {
+        "blockId": "b0014senkel"
+      }
+    },
+    {
+      "id": "e-task",
+      "to": {
+        "groupId": "g0025senkel"
+      },
+      "from": {
+        "blockId": "b0018senkel"
+      }
+    },
+    {
+      "id": "e-days",
+      "to": {
+        "groupId": "g0031senkel"
+      },
+      "from": {
+        "blockId": "b0021senkel"
+      }
+    },
+    {
+      "id": "e-soon",
+      "to": {
+        "groupId": "g0034senkel"
+      },
+      "from": {
+        "blockId": "b0028senkel",
+        "itemId": "i0027senkel"
+      }
+    },
+    {
+      "id": "e-wait",
+      "to": {
+        "groupId": "g0037senkel"
+      },
+      "from": {
+        "blockId": "b0028senkel"
+      }
+    },
+    {
+      "id": "e-mail",
+      "to": {
+        "groupId": "g0040senkel"
+      },
+      "from": {
+        "blockId": "b0032senkel"
+      }
+    },
+    {
+      "id": "e-mail-wait",
+      "to": {
+        "groupId": "g0040senkel"
+      },
+      "from": {
+        "blockId": "b0035senkel"
+      }
+    },
+    {
+      "id": "e-more",
+      "to": {
+        "groupId": "g0043senkel"
+      },
+      "from": {
+        "blockId": "b0039senkel"
+      }
+    },
+    {
+      "id": "e-end",
+      "to": {
+        "groupId": "g0047senkel"
+      },
+      "from": {
+        "blockId": "b0041senkel"
+      }
+    }
+  ],
+  "theme": {
+    "chat": {
+      "inputs": {
+        "color": "#1B3A2F",
+        "backgroundColor": "#FFFFFF",
+        "placeholderColor": "#7D8F86"
+      },
+      "buttons": {
+        "color": "#FFFFFF",
+        "backgroundColor": "#1B4332"
+      },
+      "hostAvatar": {
+        "isEnabled": true
+      },
+      "hostBubbles": {
+        "color": "#1B3A2F",
+        "backgroundColor": "#FFFFFF"
+      },
+      "guestBubbles": {
+        "color": "#FFFFFF",
+        "backgroundColor": "#2D6A4F"
+      }
+    },
+    "general": {
+      "font": {
+        "type": "Google",
+        "family": "Nunito"
+      },
+      "background": {
+        "type": "Color",
+        "content": "#F4F7F2"
+      },
+      "progressBar": {
+        "color": "#40916C",
+        "isEnabled": true,
+        "thickness": 6,
+        "backgroundColor": "#D8F3DC"
+      }
+    }
+  },
+  "settings": {
+    "general": {
+      "isBrandingEnabled": false
+    },
+    "metadata": {
+      "title": "Зелёный подоконник — Сенкель",
+      "description": "Чат-бот подбора ухода: имя, задача, дни без полива и погода в Гродно. ТВП: Сенкель."
+    }
+  },
+  "selectedThemeTemplateId": null,
+  "resultsTablePreferences": null
+}

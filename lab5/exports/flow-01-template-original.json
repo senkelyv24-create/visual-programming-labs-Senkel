@@ -1,0 +1,375 @@
+{
+  "version": "6.1",
+  "name": "Lead capture",
+  "icon": "🌱",
+  "events": [
+    {
+      "id": "s0004senkel",
+      "type": "start",
+      "outgoingEdgeId": "e-start",
+      "graphCoordinates": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "g0008senkel",
+      "title": "Welcome",
+      "blocks": [
+        {
+          "id": "b0005senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Welcome to Green Sill"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0006senkel",
+          "type": "choice input",
+          "items": [
+            {
+              "id": "i0007senkel",
+              "content": "Hi!"
+            }
+          ],
+          "outgoingEdgeId": "e-name"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 0,
+        "y": 160
+      }
+    },
+    {
+      "id": "g0011senkel",
+      "title": "Name",
+      "blocks": [
+        {
+          "id": "b0009senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "What's your name?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0010senkel",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "button": "Send",
+              "placeholder": "Type your name..."
+            },
+            "variableId": "v0001senkel"
+          },
+          "outgoingEdgeId": "e-email"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 380,
+        "y": 160
+      }
+    },
+    {
+      "id": "g0015senkel",
+      "title": "Email",
+      "blocks": [
+        {
+          "id": "b0012senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Nice to meet you, {{Name}}"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0013senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "What's the best email we can reach you at?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0014senkel",
+          "type": "email input",
+          "options": {
+            "labels": {
+              "button": "Send",
+              "placeholder": "Type your email..."
+            },
+            "variableId": "v0002senkel",
+            "retryMessageContent": "This email looks wrong. Please try again."
+          },
+          "outgoingEdgeId": "e-need"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 760,
+        "y": 160
+      }
+    },
+    {
+      "id": "g0021senkel",
+      "title": "Need",
+      "blocks": [
+        {
+          "id": "b0016senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "What do you need help with?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0017senkel",
+          "type": "choice input",
+          "items": [
+            {
+              "id": "i0018senkel",
+              "content": "Watering"
+            },
+            {
+              "id": "i0019senkel",
+              "content": "Light"
+            },
+            {
+              "id": "i0020senkel",
+              "content": "Repotting"
+            }
+          ],
+          "outgoingEdgeId": "e-details",
+          "options": {
+            "variableId": "v0003senkel"
+          }
+        }
+      ],
+      "graphCoordinates": {
+        "x": 1140,
+        "y": 160
+      }
+    },
+    {
+      "id": "g0024senkel",
+      "title": "Details",
+      "blocks": [
+        {
+          "id": "b0022senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Can you tell me a bit more about your plant?"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b0023senkel",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "button": "Send",
+              "placeholder": "Type your answer..."
+            },
+            "variableId": "v0025senkel"
+          },
+          "outgoingEdgeId": "e-bye"
+        }
+      ],
+      "graphCoordinates": {
+        "x": 1520,
+        "y": 160
+      }
+    },
+    {
+      "id": "g0027senkel",
+      "title": "Bye",
+      "blocks": [
+        {
+          "id": "b0026senkel",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Perfect. We'll get back to you at {{Email}} about {{Need}}."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "graphCoordinates": {
+        "x": 1900,
+        "y": 160
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "v0001senkel",
+      "name": "Name",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0002senkel",
+      "name": "Email",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0003senkel",
+      "name": "Need",
+      "isSessionVariable": false
+    },
+    {
+      "id": "v0025senkel",
+      "name": "Note",
+      "isSessionVariable": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-start",
+      "to": {
+        "groupId": "g0008senkel"
+      },
+      "from": {
+        "eventId": "s0004senkel"
+      }
+    },
+    {
+      "id": "e-name",
+      "to": {
+        "groupId": "g0011senkel"
+      },
+      "from": {
+        "blockId": "b0006senkel"
+      }
+    },
+    {
+      "id": "e-email",
+      "to": {
+        "groupId": "g0015senkel"
+      },
+      "from": {
+        "blockId": "b0010senkel"
+      }
+    },
+    {
+      "id": "e-need",
+      "to": {
+        "groupId": "g0021senkel"
+      },
+      "from": {
+        "blockId": "b0014senkel"
+      }
+    },
+    {
+      "id": "e-details",
+      "to": {
+        "groupId": "g0024senkel"
+      },
+      "from": {
+        "blockId": "b0017senkel"
+      }
+    },
+    {
+      "id": "e-bye",
+      "to": {
+        "groupId": "g0027senkel"
+      },
+      "from": {
+        "blockId": "b0023senkel"
+      }
+    }
+  ],
+  "theme": {
+    "chat": {
+      "buttons": {
+        "color": "#FFFFFF",
+        "backgroundColor": "#64748B"
+      },
+      "hostBubbles": {
+        "color": "#0F172A",
+        "backgroundColor": "#FFFFFF"
+      },
+      "guestBubbles": {
+        "color": "#FFFFFF",
+        "backgroundColor": "#64748B"
+      }
+    },
+    "general": {
+      "font": {
+        "type": "Google",
+        "family": "Open Sans"
+      },
+      "background": {
+        "type": "Color",
+        "content": "#F8FAFC"
+      }
+    }
+  },
+  "settings": {
+    "general": {
+      "isBrandingEnabled": true
+    },
+    "metadata": {
+      "title": "Green Sill",
+      "description": "Tell us about your plant."
+    }
+  },
+  "selectedThemeTemplateId": null,
+  "resultsTablePreferences": null
+}
